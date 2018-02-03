@@ -50,10 +50,10 @@ class ContactData extends Component {
 				value: ''
 			},
 			deliveryMethod: {
-				elementType: 'input',
+				elementType: 'select',
 				elementConfig: {
 					options: [
-						{valu: 'fastest', displayValue: 'Fastest'},
+						{value: 'fastest', displayValue: 'Fastest'},
 						{value: 'cheapest', displayValue: 'Cheapest'}
 					]
 				},
@@ -80,6 +80,17 @@ class ContactData extends Component {
 			});
 	}
 
+	inputChangedHandler = (event, inputIdentifier) => {
+		const updateOrderForm = {
+			...this.state.orderForm
+		};
+		const updateFormElement = {
+			...updateOrderForm[inputIdentifier]
+		};
+		updateFormElement.value = event.target.value;
+		updateOrderForm[inputIdentifier] = updateFormElement;
+		this.setState({orderForm: updateOrderForm});
+	}
 	render () {
 		const formElementsArray = [];
 		for (let key in this.state.orderForm) {
@@ -95,7 +106,8 @@ class ContactData extends Component {
 						key={formElement.id}
 						elementType={formElement.config.elementType}
 						elementConfig={formElement.config.elementConfig}
-						value={formElement.config.value} />
+						value={formElement.config.value} 
+						changed={(event)=>this.inputChangedHandler(event, formElement.id)}/>
 					))}
 				<Button btnType="Success" clicked={this.orderHandler}>ORDER</Button>
 			</form>

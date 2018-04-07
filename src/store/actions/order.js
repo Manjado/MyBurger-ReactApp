@@ -59,6 +59,26 @@ export const fetchOrdersFail = (error) => {
 export const fetchOrdersStart = () => {
     return {
         type: actionTypes.FETCH_ORDERS_START
+    };
+};
+
+export const fetchOrders = () => {
+    return dispatch => {
+        dispatch(fetchOrdersStart())
+        axios.get('/orders.json')
+            .then(res => {
+                const fetchedOrders = [];
+                for (let key in res.data) {
+                    fetchedOrders.push({
+                        ...res.data[key],
+                        id: key
+                    });
+                    console.log(fetchedOrders)
+                }
+                dispatch(fetchOrdersSuccess(fetchedOrders))
+            })
+            .catch(err => {
+               dispatch(fetchOrdersFail(err));
+            });
     }
 }
-// 300 3:35
